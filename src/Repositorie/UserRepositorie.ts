@@ -56,13 +56,14 @@ export const UserRepositorie = {
     return result.rows[0] ?? null;
   },
 
-  async desactivate(id: number): Promise<boolean> {
-    const result = await pool.query(
+  async desactivate(id: number): Promise<Omit<User, 'password_hash'> | null> {
+    const result = await pool.query<Omit<User, 'password_hash'>>(
       `UPDATE users
        SET is_active = false
-       WHERE id = $1 AND role = 'student'`,
+       WHERE id = $1 AND role = 'student'
+       RETURNING id, name, email, role, is_active, created_at`,
       [id]
     );
-    return (result.rowCount ?? 0) > 0;
+    return result.rows[0] ?? null;
   },
 };

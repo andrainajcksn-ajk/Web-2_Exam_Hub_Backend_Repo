@@ -29,6 +29,6 @@ export const updateStudent = asyncHandler(async (req: Request<{ id: string }>, r
 
 export const desactivateStudent = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
   const id = parseId(req.params.id);
-  await StudentService.desactivateStudent(id);
-  res.status(204).send();
+  const student = await StudentService.desactivateStudent(id);
+  res.status(200).json(student);
 });
