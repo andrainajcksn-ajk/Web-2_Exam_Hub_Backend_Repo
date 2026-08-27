@@ -95,10 +95,11 @@ export const StudentService = {
     return toOutput(updated);
   },
 
-  desactivateStudent: async (id: number): Promise<void> => {
-    const ok = await UserRepositorie.desactivate(id);
-    if (!ok) {
-      throw new NotFoundError('Étudiant introuvable');
+  desactivateStudent: async (id: number): Promise<StudentOutput> => {
+    const student = await UserRepositorie.desactivate(id);
+    if (!student) {
+      throw new NotFoundError('Student not found');
     }
+    return toOutput(student)
   },
 };
