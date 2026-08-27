@@ -11,7 +11,7 @@ export const CourseRepositorie = {
     return result.rows;
   },
 
-  findById: async (id: string): Promise<Course | null> => {
+  findById: async (id: number): Promise<Course | null> => {
     const result = await pool.query<Course>(
       `SELECT id, code, name, description
        FROM courses
@@ -41,7 +41,7 @@ export const CourseRepositorie = {
     return result.rows[0]!;
   },
 
-  update: async (id: string, data: { code: string; name: string; description: string | null }): Promise<Course | null> => {
+  update: async (id: number, data: { code: string; name: string; description: string | null }): Promise<Course | null> => {
     const result = await pool.query<Course>(
       `UPDATE courses
        SET code = $1, name = $2, description = $3
@@ -52,7 +52,7 @@ export const CourseRepositorie = {
     return result.rows[0] ?? null;
   },
 
-  delete: async (id: string): Promise<boolean> => {
+  delete: async (id: number): Promise<boolean> => {
     const result = await pool.query(
       `DELETE FROM courses
        WHERE id = $1`,
@@ -61,7 +61,7 @@ export const CourseRepositorie = {
     return (result.rowCount ?? 0) > 0;
   },
 
-  hasExams: async (id: string): Promise<boolean> => {
+  hasExams: async (id: number): Promise<boolean> => {
     const result = await pool.query(
       `SELECT 1
        FROM exams
