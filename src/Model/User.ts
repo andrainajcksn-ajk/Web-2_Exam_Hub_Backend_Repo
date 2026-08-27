@@ -11,6 +11,6 @@ export interface User {
 }
 
 export interface AuthenticatedUser {
-  id: number;
+  userId: number;
   role: UserRole;
 }
