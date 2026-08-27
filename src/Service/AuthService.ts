@@ -24,7 +24,7 @@ export const AuthService = {
       throw new ForbiddenError('Ce compte a été désactivé');
     }
 
-    const token = signToken({ id: user.id, role: user.role });
+    const token = signToken({ userId: user.id, role: user.role });
 
     return {
       token,
