@@ -4,18 +4,22 @@ import { Course } from '../Model/Course';
 export const CourseRepositorie = {
   findAll: async (): Promise<Course[]> => {
     const result = await pool.query<Course>(
-      `SELECT id, code, name, description
+      `SELECT courses.id, courses.code, courses.name, courses.description, COUNT(exams.id):: int AS total_points
        FROM courses
-       ORDER BY code`
+       LEFT JOIN exams ON exams.course_id = courses.id
+       GROUP BY courses.id, courses.code, courses.name, courses.description
+       ORDER BY courses.code`
     );
     return result.rows;
   },
 
   findById: async (id: number): Promise<Course | null> => {
     const result = await pool.query<Course>(
-      `SELECT id, code, name, description
-       FROM courses
-       WHERE id = $1`,
+      `SELECT courses.id, courses.code, courses.name, courses.description, COUNT(exams.id)::int AS total_points
+      FROM courses
+      LEFT JOIN exams ON exams.course_id = courses.id
+      WHERE courses.id = $1
+      GROUP BY courses.id`,
       [id]
     );
     return result.rows[0] ?? null;
