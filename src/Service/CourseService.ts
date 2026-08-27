@@ -45,7 +45,7 @@ export const CourseService = {
     });
   },
 
-  updateCourse: async (id: string, data: CourseInput): Promise<Course> => {
+  updateCourse: async (id: number, data: CourseInput): Promise<Course> => {
     validateCourseInput(data);
 
     const course = await CourseRepositorie.findById(id);

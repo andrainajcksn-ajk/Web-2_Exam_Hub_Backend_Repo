@@ -12,12 +12,12 @@ export const createCourse = asyncHandler(async (req: Request, res: Response) => 
   res.status(201).json(course);
 });
 
-export const updateCourse = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
+export const updateCourse = asyncHandler(async (req: Request<{ id: number }>, res: Response) => {
   const course = await CourseService.updateCourse(req.params.id, req.body);
   res.status(200).json(course);
 });
 
-export const deleteCourse = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
+export const deleteCourse = asyncHandler(async (req: Request<{ id: number }>, res: Response) => {
   await CourseService.deleteCourse(req.params.id);
   res.status(204).send();
 });
