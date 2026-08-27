@@ -3,4 +3,5 @@ export interface Course {
   code: string;
   name: string;
   description: string | null;
+  total_points: number;
 }

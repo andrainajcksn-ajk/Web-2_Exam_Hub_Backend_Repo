@@ -22,7 +22,7 @@ export const CourseService = {
     return CourseRepositorie.findAll();
   },
 
-  getCourseById: async (id: string): Promise<Course> => {
+  getCourseById: async (id: number): Promise<Course> => {
     const course = await CourseRepositorie.findById(id);
     if (!course) {
       throw new NotFoundError('Cours introuvable');
@@ -67,7 +67,7 @@ export const CourseService = {
     return updated!;
   },
 
-  deleteCourse: async (id: string): Promise<void> => {
+  deleteCourse: async (id: number): Promise<void> => {
     const course = await CourseRepositorie.findById(id);
     if (!course) {
       throw new NotFoundError('Cours introuvable');
