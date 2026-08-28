@@ -1,4 +1,4 @@
-import { AppError } from '../appError';
+import { AppError } from '../errors/appError';
 import * as courseRepo from '../repositories/courseRepository';
 
 export async function listCourses() {

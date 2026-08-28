@@ -1,4 +1,4 @@
-import { AppError } from '../appError';
+import { AppError } from '../errors/appError';
 import * as userRepo from '../repositories/userRepository';
 import { hashPassword } from '../security/password';
 

@@ -1,4 +1,4 @@
-import { AppError } from '../appError';
+import { AppError } from '../errors/appError';
 import * as examRepo from '../repositories/examRepository';
 import * as questionRepo from '../repositories/questionRepository';
 import * as choiceRepo from '../repositories/choiceRepository';
