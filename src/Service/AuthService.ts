@@ -1,7 +1,7 @@
-import { UserRepositorie } from '../Repositorie/UserRepositorie';
-import { comparePassword } from '../Security/password';
-import { signToken } from '../Security/jwt';
-import { BadRequestError, UnauthorizedError, ForbiddenError } from '../errors/AppError';
+import { UserRepositorie } from '../repositories/userRepositorie';
+import { comparePassword } from '../security/password';
+import { signToken } from '../security/jwt';
+import { BadRequestError, UnauthorizedError, ForbiddenError } from '../errors/appError';
 
 interface LoginResult {
   token: string;
