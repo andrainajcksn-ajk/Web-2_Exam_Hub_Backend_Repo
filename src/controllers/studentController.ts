@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { StudentService } from '../service/StudentService';
+import { StudentService } from '../service/studentService';
 import { asyncHandler } from '../middlewares/errorHandler';
-import { BadRequestError } from '../errors/AppError';
+import { BadRequestError } from '../errors/appError';
 
 const parseId = (raw: string): number => {
   const id = Number(raw);

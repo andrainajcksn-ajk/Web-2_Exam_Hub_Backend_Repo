@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { listStudents, createStudent, updateStudent, desactivateStudent } from '../controllers/StudentController';
+import { listStudents, createStudent, updateStudent, desactivateStudent } from '../controllers/studentController';
 import { authenticate, authorize } from '../security/authMiddleware';
 
 const router = Router();
