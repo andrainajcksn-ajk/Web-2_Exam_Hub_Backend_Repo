@@ -1,4 +1,4 @@
-import { Choice } from '../Model/choiceModel';
+import { Choice } from '../models/choiceModel';
 
 export interface Question {
   id: number;
