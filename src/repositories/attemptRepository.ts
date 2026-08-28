@@ -10,7 +10,7 @@ export async function findByStudentAndExam(
     [studentId, examId]
   );
   return rows[0];
-}
+};
 
 export async function createAttempt(
   studentId: number,

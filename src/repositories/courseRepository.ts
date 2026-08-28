@@ -11,7 +11,7 @@ export async function allCourses(): Promise<Course[]> {
      ORDER BY c.id`
   );
   return rows;
-}
+};
 
 export async function findById(id: number): Promise<Course | undefined> {
   const { rows } = await query('SELECT * FROM courses WHERE id = $1', [id]);

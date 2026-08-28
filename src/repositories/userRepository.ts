@@ -10,6 +10,7 @@ function toPublic(row: any): UserPublic {
     created_at: row.created_at,
   };
 }
+;
 
 export async function findByEmail(email: string): Promise<User | undefined> {
   const { rows } = await query('SELECT * FROM users WHERE email = $1', [email]);

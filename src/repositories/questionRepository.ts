@@ -1,5 +1,5 @@
 import { query } from '../config/db';
-import { Question, QuestionInput } from '../models/questionModel';
+import { Question, QuestionInput } from '../Model/questionModel';
 
 export async function questionsForExam(examId: number): Promise<Question[]> {
   const { rows } = await query(
