@@ -5,7 +5,7 @@ export async function list(req: Request, res: Response) {
   try {
     res.json(await courseService.listCourses());
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
 
@@ -18,7 +18,7 @@ export async function create(req: Request, res: Response) {
     );
     res.status(201).json(course);
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
 
@@ -32,7 +32,7 @@ export async function update(req: Request, res: Response) {
     );
     res.json(course);
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
 
@@ -41,6 +41,6 @@ export async function remove(req: Request, res: Response) {
     await courseService.deleteCourse(Number(req.params.id));
     res.json({ message: 'Course deleted' });
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }

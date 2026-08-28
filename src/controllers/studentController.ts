@@ -5,7 +5,7 @@ export async function list(req: Request, res: Response) {
   try {
     res.json(await studentService.listStudents());
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
 
@@ -18,7 +18,7 @@ export async function create(req: Request, res: Response) {
     );
     res.status(201).json(student);
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
 
@@ -33,7 +33,7 @@ export async function update(req: Request, res: Response) {
     );
     res.json(student);
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
 
@@ -42,6 +42,6 @@ export async function deactivate(req: Request, res: Response) {
     const student = await studentService.deactivateStudent(Number(req.params.id));
     res.json(student);
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
