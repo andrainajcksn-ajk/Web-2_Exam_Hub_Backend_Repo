@@ -1,5 +1,5 @@
 import { query } from '../config/db';
-import { hashPassword } from '../Security/password';
+import { hashPassword } from '../security/password';
 
 // RG-01 : premier compte administrateur via ce script
 async function seed() {
