@@ -1,4 +1,4 @@
-import { AppError } from '../errors/appError';
+import { AppError } from '../errors/AppError';
 import { query } from '../config/db';
 import * as examRepo from '../repositories/examRepository';
 import * as questionRepo from '../repositories/questionRepository';
