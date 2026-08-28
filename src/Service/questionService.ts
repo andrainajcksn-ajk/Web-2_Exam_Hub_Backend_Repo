@@ -2,7 +2,7 @@ import { AppError } from '../appError';
 import * as examRepo from '../repositories/examRepository';
 import * as questionRepo from '../repositories/questionRepository';
 import * as choiceRepo from '../repositories/choiceRepository';
-import { QuestionInput } from '../Model/questionModel';
+import { QuestionInput } from '../models/questionModel';
 
 function validateQuestion(input: QuestionInput) {
   if (!input.statement || !Array.isArray(input.choices)) {

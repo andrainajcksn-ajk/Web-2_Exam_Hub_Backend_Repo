@@ -5,7 +5,7 @@ import * as questionRepo from '../repositories/questionRepository';
 import * as choiceRepo from '../repositories/choiceRepository';
 import * as attemptRepo from '../repositories/attemptRepository';
 import * as answerRepo from '../repositories/answerRepository';
-import { AnswerInput } from '../Model/attemptModel';
+import { AnswerInput } from '../models/attemptModel';
 
 function now() {
   return new Date();

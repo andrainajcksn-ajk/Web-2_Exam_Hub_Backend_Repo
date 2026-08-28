@@ -1,5 +1,5 @@
 import { query } from '../config/db';
-import { User, UserPublic } from '../Model/userModel';
+import { User, UserPublic } from '../models/userModel';
 
 function toPublic(row: any): UserPublic {
   return {

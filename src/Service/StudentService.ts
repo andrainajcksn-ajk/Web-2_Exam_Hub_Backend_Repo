@@ -16,7 +16,7 @@ export async function createStudent(name: string, email: string, password: strin
     throw new AppError(409, 'Email already in use');
   }
 
-  return userRepo.createStudent(name, email, hashPassword(password));
+  return userRepo.createStudent(name, email, await hashPassword(password));
 }
 
 export async function updateStudent(
@@ -42,7 +42,7 @@ export async function updateStudent(
     }
   }
 
-  const hash = password ? hashPassword(password) : undefined;
+  const hash = password ? await hashPassword(password) : undefined;
   return userRepo.updateStudent(id, name, email, isActive, hash);
 }
 

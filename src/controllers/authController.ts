@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as authService from '../Service/authService';
+import * as authService from '../service/authService';
 
 export async function login(req: Request, res: Response) {
   try {
@@ -7,6 +7,6 @@ export async function login(req: Request, res: Response) {
     const data = await authService.login(email, password);
     res.json(data);
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
