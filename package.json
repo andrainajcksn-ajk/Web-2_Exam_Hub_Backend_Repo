@@ -4,7 +4,8 @@
   "description": "Dépôt de code pour l'examen de WEB2 Exam Hub-Backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "tsx src/scripts/scriptAdmin.ts"
   },
   "repository": {
     "type": "git",
