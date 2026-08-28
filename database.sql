@@ -2,6 +2,8 @@
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+CREATE DATABASE exam_hub_db;
+
 CREATE TYPE user_role AS ENUM ('admin', 'student');
 
 CREATE TABLE users (
