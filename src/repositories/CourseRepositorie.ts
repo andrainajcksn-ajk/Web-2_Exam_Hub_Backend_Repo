@@ -1,5 +1,5 @@
 import { pool } from '../config/db';
-import { Course } from '../Model/Course';
+import { Course } from '../models/course';
 
 export const CourseRepositorie = {
   findAll: async (): Promise<Course[]> => {

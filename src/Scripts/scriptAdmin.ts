@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { pool } from '../config/db';
-import { hashPassword } from '../Security/password';
+import { hashPassword } from '../security/password';
 
 const seedAdmin = async (): Promise<void> => {
     const name = process.env.ADMIN_NAME;
