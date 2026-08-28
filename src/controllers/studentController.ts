@@ -1,34 +1,47 @@
 import { Request, Response } from 'express';
-import { StudentService } from '../service/studentService';
-import { asyncHandler } from '../middlewares/errorHandler';
-import { BadRequestError } from '../errors/appError';
+import * as studentService from '../Service/studentService';
 
-const parseId = (raw: string): number => {
-  const id = Number(raw);
-  if (!Number.isInteger(id)) {
-    throw new BadRequestError('Identifiant invalide');
+export async function list(req: Request, res: Response) {
+  try {
+    res.json(await studentService.listStudents());
+  } catch (err: any) {
+    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
   }
-  return id;
-};
+}
 
-export const listStudents = asyncHandler(async (req: Request, res: Response) => {
-  const students = await StudentService.listStudents();
-  res.status(200).json(students);
-});
+export async function create(req: Request, res: Response) {
+  try {
+    const student = await studentService.createStudent(
+      req.body.name,
+      req.body.email,
+      req.body.password
+    );
+    res.status(201).json(student);
+  } catch (err: any) {
+    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+  }
+}
 
-export const createStudent = asyncHandler(async (req: Request, res: Response) => {
-  const student = await StudentService.createStudent(req.body);
-  res.status(201).json(student);
-});
+export async function update(req: Request, res: Response) {
+  try {
+    const student = await studentService.updateStudent(
+      Number(req.params.id),
+      req.body.name,
+      req.body.email,
+      req.body.is_active ?? true,
+      req.body.password
+    );
+    res.json(student);
+  } catch (err: any) {
+    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+  }
+}
 
-export const updateStudent = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
-  const id = parseId(req.params.id);
-  const student = await StudentService.updateStudent(id, req.body);
-  res.status(200).json(student);
-});
-
-export const desactivateStudent = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
-  const id = parseId(req.params.id);
-  const student = await StudentService.desactivateStudent(id);
-  res.status(200).json(student);
-});
+export async function deactivate(req: Request, res: Response) {
+  try {
+    const student = await studentService.deactivateStudent(Number(req.params.id));
+    res.json(student);
+  } catch (err: any) {
+    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+  }
+}

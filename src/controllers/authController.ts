@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
-import { AuthService } from '../service/authService';
-import { asyncHandler } from '../middlewares/errorHandler';
+import * as authService from '../Service/authService';
 
-export const login = asyncHandler(async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  const result = await AuthService.login(email, password);
-  res.status(200).json(result);
-});
+export async function login(req: Request, res: Response) {
+  try {
+    const { email, password } = req.body;
+    const data = await authService.login(email, password);
+    res.json(data);
+  } catch (err: any) {
+    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+  }
+}
