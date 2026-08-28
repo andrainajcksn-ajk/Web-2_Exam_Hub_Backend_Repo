@@ -1,6 +1,6 @@
-import { CourseRepositorie } from '../Repositorie/CourseRepositorie';
-import { Course } from '../Model/Course';
-import { BadRequestError, NotFoundError, ConflictError } from '../errors/AppError';
+import { CourseRepositorie } from '../repositories/courseRepositorie';
+import { Course } from '../models/course';
+import { BadRequestError, NotFoundError, ConflictError } from '../errors/appError';
 
 interface CourseInput {
   code: string;
