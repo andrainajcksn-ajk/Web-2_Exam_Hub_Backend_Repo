@@ -1,7 +1,5 @@
 import { query } from '../config/db';
 
-// Les opérations sur les choix passent par question.repository
-// Ce fichier garde un accès SQL brut pour la lecture groupée.
 
 export async function choicesByQuestionIds(questionIds: number[]) {
   if (questionIds.length === 0) return {};
