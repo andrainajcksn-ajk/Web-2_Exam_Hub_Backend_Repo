@@ -1,4 +1,4 @@
-import { AppError } from '../appError';
+import { AppError } from '../errors/AppError';
 import * as userRepo from '../repositories/userRepository';
 import { comparePassword } from '../security/password';
 import { signToken } from '../security/jwt';
