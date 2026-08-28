@@ -1,5 +1,5 @@
-import { UserRepositorie } from '../Repositorie/UserRepositorie';
-import { hashPassword } from '../Security/password';
+import { UserRepositorie } from '../repositories/UserRepositorie';
+import { hashPassword } from '../security/password';
 import { BadRequestError, NotFoundError, ConflictError } from '../errors/AppError';
 
 interface StudentOutput {

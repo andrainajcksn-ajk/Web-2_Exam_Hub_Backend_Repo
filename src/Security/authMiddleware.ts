@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from './jwt';
-import { UnauthorizedError, ForbiddenError } from '../errors/AppError';
-import { AuthenticatedUser, UserRole } from '../Model/User';
+import { UnauthorizedError, ForbiddenError } from '../errors/appError';
+import { AuthenticatedUser, UserRole } from '../models/User';
 
 declare global {
   namespace Express {

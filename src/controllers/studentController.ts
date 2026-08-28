@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { StudentService } from '../Service/StudentService';
+import { StudentService } from '../service/StudentService';
 import { asyncHandler } from '../middlewares/errorHandler';
 import { BadRequestError } from '../errors/AppError';
 

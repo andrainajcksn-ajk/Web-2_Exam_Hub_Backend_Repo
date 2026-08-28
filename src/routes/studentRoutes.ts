@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { listStudents, createStudent, updateStudent, desactivateStudent } from '../Controller/StudentController';
-import { authenticate, authorize } from '../Security/authMiddleware';
+import { listStudents, createStudent, updateStudent, desactivateStudent } from '../controllers/StudentController';
+import { authenticate, authorize } from '../security/authMiddleware';
 
 const router = Router();
 
