@@ -1,6 +1,6 @@
 import { AppError } from '../appError';
 import * as userRepo from '../repositories/userRepository';
-import { hashPassword } from '../Security/password';
+import { hashPassword } from '../security/password';
 
 export async function listStudents() {
   return userRepo.allStudents();
