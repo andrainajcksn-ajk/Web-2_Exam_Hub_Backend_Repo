@@ -1,7 +1,7 @@
 import { AppError } from '../appError';
-import * as userRepo from '../repositories/userRepository.js';
-import { verifyPassword } from '../Security/password';
-import { signToken } from '../Security/jwt';
+import * as userRepo from '../repositories/userRepository';
+import { verifyPassword } from '../security/password';
+import { signToken } from '../security/jwt';
 
 export async function login(email: string, password: string) {
   if (!email || !password) {
