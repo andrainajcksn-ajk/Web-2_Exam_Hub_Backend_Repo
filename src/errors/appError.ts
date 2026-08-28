@@ -2,7 +2,7 @@
 export class AppError extends Error {
   public readonly statusCode: number;
 
-  constructor(message: string, statusCode: number) {
+  constructor(statusCode: number, message: string ) {
     super(message);
     this.statusCode = statusCode;
     Object.setPrototypeOf(this, new.target.prototype);
@@ -11,30 +11,30 @@ export class AppError extends Error {
 
 export class BadRequestError extends AppError {
   constructor(message = 'Données invalides') {
-    super(message, 400);
+    super(400, message);
   }
 }
 
 export class UnauthorizedError extends AppError {
   constructor(message = 'Non authentifié') {
-    super(message, 401);
+    super(401, message);
   }
 }
 
 export class ForbiddenError extends AppError {
   constructor(message = 'Non autorisé') {
-    super(message, 403);
+    super(403, message);
   }
 }
 
 export class NotFoundError extends AppError {
   constructor(message = 'Introuvable') {
-    super(message, 404);
+    super(404, message);
   }
 }
 
 export class ConflictError extends AppError {
   constructor(message = 'Conflit') {
-    super(message, 409);
+    super(409, message);
   }
 }
