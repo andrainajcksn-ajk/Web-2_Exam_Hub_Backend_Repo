@@ -1,83 +1,46 @@
-import { CourseRepositorie } from '../Repositorie/CourseRepositorie';
-import { Course } from '../Model/Course';
-import { BadRequestError, NotFoundError, ConflictError } from '../errors/AppError';
+import { AppError } from '../appError';
+import * as courseRepo from '../repositories/courseRepository';
 
-interface CourseInput {
-  code: string;
-  name: string;
-  description?: string | null;
+export async function listCourses() {
+  return courseRepo.allCourses();
 }
 
-const validateCourseInput = (data: CourseInput): void => {
-  if (!data.code || !data.code.trim()) {
-    throw new BadRequestError('Le code du cours est requis');
+export async function createCourse(code: string, name: string, description?: string) {
+  if (!code || !name) {
+    throw new AppError(400, 'code and name are required');
   }
-  if (!data.name || !data.name.trim()) {
-    throw new BadRequestError('Le nom du cours est requis');
+  const existing = await courseRepo.findByCode(code);
+  if (existing) {
+    throw new AppError(409, 'Course code already in use');
   }
-};
+  return courseRepo.createCourse(code, name, description || null);
+}
 
-export const CourseService = {
-  listCourses: async (): Promise<Course[]> => {
-    return CourseRepositorie.findAll();
-  },
-
-  getCourseById: async (id: number): Promise<Course> => {
-    const course = await CourseRepositorie.findById(id);
-    if (!course) {
-      throw new NotFoundError('Cours introuvable');
-    }
-    return course;
-  },
-
-  createCourse: async (data: CourseInput): Promise<Course> => {
-    validateCourseInput(data);
-
-    const existing = await CourseRepositorie.findByCode(data.code.trim());
+export async function updateCourse(id: number, code: string, name: string, description?: string) {
+  if (!code || !name) {
+    throw new AppError(400, 'code and name are required');
+  }
+  const course = await courseRepo.findById(id);
+  if (!course) {
+    throw new AppError(404, 'Course not found');
+  }
+  if (code.toLowerCase() !== course.code.toLowerCase()) {
+    const existing = await courseRepo.findByCode(code);
     if (existing) {
-      throw new ConflictError('Ce code de cours est déjà utilisé');
+      throw new AppError(409, 'Course code already in use');
     }
+  }
+  return courseRepo.updateCourse(id, code, name, description || null);
+}
 
-    return CourseRepositorie.create({
-      code: data.code.trim(),
-      name: data.name.trim(),
-      description: data.description ?? null,
-    });
-  },
-
-  updateCourse: async (id: number, data: CourseInput): Promise<Course> => {
-    validateCourseInput(data);
-
-    const course = await CourseRepositorie.findById(id);
-    if (!course) {
-      throw new NotFoundError('Cours introuvable');
-    }
-
-    const existing = await CourseRepositorie.findByCode(data.code.trim());
-    if (existing && existing.id !== id) {
-      throw new ConflictError('Ce code de cours est déjà utilisé');
-    }
-
-    const updated = await CourseRepositorie.update(id, {
-      code: data.code.trim(),
-      name: data.name.trim(),
-      description: data.description ?? null,
-    });
-
-    return updated!;
-  },
-
-  deleteCourse: async (id: number): Promise<void> => {
-    const course = await CourseRepositorie.findById(id);
-    if (!course) {
-      throw new NotFoundError('Cours introuvable');
-    }
-
-    const hasExams = await CourseRepositorie.hasExams(id);
-    if (hasExams) {
-      throw new ConflictError('Ce cours possède des examens et ne peut pas être supprimé');
-    }
-
-    await CourseRepositorie.delete(id);
-  },
-};
+export async function deleteCourse(id: number) {
+  const course = await courseRepo.findById(id);
+  if (!course) {
+    throw new AppError(404, 'Course not found');
+  }
+  const count = await courseRepo.countExams(id);
+  if (count > 0) {
+    throw new AppError(409, 'Cannot delete a course that has exams');
+  }
+  return courseRepo.deleteCourse(id);
+}
