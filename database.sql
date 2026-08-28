@@ -1,68 +1,60 @@
---- Hello, ce fichier contient tous nos syntaxes de la création de la base de données et des entités ---
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
-CREATE DATABASE exam_hub_db;
-
-CREATE TYPE user_role AS ENUM ('admin', 'student');
-
-CREATE TABLE users (
-  id            SERIAL PRIMARY KEY,
-  name          VARCHAR(150) NOT NULL,
-  email         VARCHAR(255) NOT NULL UNIQUE,
-  password_hash VARCHAR(255) NOT NULL,
-  role          user_role NOT NULL,
-  is_active     BOOLEAN NOT NULL DEFAULT TRUE,
-  created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+CREATE TABLE IF NOT EXISTS users (
+    id            SERIAL PRIMARY KEY,
+    name          VARCHAR(100) NOT NULL,
+    email         VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role          VARCHAR(10)  NOT NULL DEFAULT 'student',
+    is_active     BOOLEAN      NOT NULL DEFAULT TRUE,
+    created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE courses (
-  id          SERIAL PRIMARY KEY,
-  code        VARCHAR(20) NOT NULL UNIQUE,
-  name        VARCHAR(150) NOT NULL,
-  description VARCHAR(500)
+CREATE TABLE IF NOT EXISTS courses (
+    id          SERIAL PRIMARY KEY,
+    code        VARCHAR(20)  NOT NULL,
+    name        VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE exams (
-  id          SERIAL PRIMARY KEY,
-  title       VARCHAR(150) NOT NULL,
-  description VARCHAR(500),
-  starts_at   TIMESTAMPTZ NOT NULL,
-  ends_at     TIMESTAMPTZ NOT NULL,
-  created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
-  course_id   SERIAL NOT NULL REFERENCES courses(id) ON DELETE RESTRICT,
-  CONSTRAINT exams_window_valid CHECK (ends_at > starts_at)
+CREATE TABLE IF NOT EXISTS exams (
+    id          SERIAL PRIMARY KEY,
+    course_id   INTEGER     NOT NULL,
+    title       VARCHAR(150) NOT NULL,
+    description TEXT,
+    starts_at   TIMESTAMPTZ NOT NULL,
+    ends_at     TIMESTAMPTZ NOT NULL,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE questions (
-  id         SERIAL PRIMARY KEY,
-  statement  TEXT NOT NULL,
-  exam_id    SERIAL NOT NULL REFERENCES exams(id) ON DELETE CASCADE,
-  points     INTEGER NOT NULL CHECK (points > 0)
+CREATE TABLE IF NOT EXISTS questions (
+    id         SERIAL PRIMARY KEY,
+    exam_id    INTEGER     NOT NULL,
+    statement  TEXT        NOT NULL,
+    points     INTEGER     NOT NULL DEFAULT 1,
+    position   INTEGER     NOT NULL DEFAULT 1,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE choices (
-  id          SERIAL PRIMARY KEY,
-  label       VARCHAR(255) NOT NULL,
-  is_correct  BOOLEAN NOT NULL DEFAULT FALSE,
-  question_id SERIAL NOT NULL REFERENCES questions(id) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS choices (
+    id          SERIAL PRIMARY KEY,
+    question_id INTEGER NOT NULL,
+    text        TEXT    NOT NULL,
+    is_correct  BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_choices_question_id ON choices(question_id);
-
-CREATE TABLE attempts (
-  id           SERIAL PRIMARY KEY,
-  submitted_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  score        INTEGER NOT NULL DEFAULT 0,
-  student_id   SERIAL NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
-  exam_id      SERIAL NOT NULL REFERENCES exams(id) ON DELETE RESTRICT,
-  CONSTRAINT attempts_one_per_student_exam UNIQUE (student_id, exam_id)
+CREATE TABLE IF NOT EXISTS attempts (
+    id           SERIAL PRIMARY KEY,
+    student_id   INTEGER     NOT NULL,
+    exam_id      INTEGER     NOT NULL,
+    score        INTEGER     NOT NULL DEFAULT 0,
+    submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE answers (
-  id          SERIAL PRIMARY KEY,
-  attempt_id  SERIAL NOT NULL REFERENCES attempts(id) ON DELETE CASCADE,
-  question_id SERIAL NOT NULL REFERENCES questions(id) ON DELETE RESTRICT,
-  choice_id   SERIAL REFERENCES choices(id) ON DELETE RESTRICT,
-  CONSTRAINT answers_one_per_attempt_question UNIQUE (attempt_id, question_id)
+CREATE TABLE IF NOT EXISTS answers (
+    id          SERIAL PRIMARY KEY,
+    attempt_id  INTEGER NOT NULL,
+    question_id INTEGER NOT NULL,
+    choice_id   INTEGER NOT NULL
 );

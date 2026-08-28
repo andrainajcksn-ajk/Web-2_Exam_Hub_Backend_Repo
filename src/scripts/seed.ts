@@ -28,7 +28,7 @@ async function seed() {
     if (ex.rows.length === 0) {
       await query(
         "INSERT INTO users (name, email, password_hash, role) VALUES ($1, $2, $3, 'student')",
-        [s.name, s.email, hashPassword('student123')]
+        [s.name, s.email, await hashPassword('student123')]
       );
       console.log(`Student created: ${s.email} / student123`);
     }
