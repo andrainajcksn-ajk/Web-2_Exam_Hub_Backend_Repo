@@ -1,5 +1,5 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
-import { AuthenticatedUser } from '../models/user';
+import { AuthenticatedUser } from '../models/userModel';
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || '8h') as NonNullable<SignOptions['expiresIn']>;

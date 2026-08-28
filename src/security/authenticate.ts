@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { verifyToken } from './jwt';
 
-// Vérifie la présence et la validité du JWT
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (!header || !header.startsWith('Bearer ')) {
