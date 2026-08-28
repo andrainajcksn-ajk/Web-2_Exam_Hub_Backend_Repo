@@ -1,5 +1,5 @@
 import { query } from '../config/db';
-import { Attempt } from '../Model/attemptModel';
+import { Attempt } from '../models/attemptModel';
 
 export async function findByStudentAndExam(
   studentId: number,
