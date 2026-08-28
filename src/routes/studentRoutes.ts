@@ -1,13 +1,11 @@
 import { Router } from 'express';
-import { listStudents, createStudent, updateStudent, desactivateStudent } from '../controllers/studentController';
-import { authenticate, authorize } from '../security/authMiddleware';
+import * as studentController from '../controllers/studentController';
 
 const router = Router();
 
-router.use(authenticate, authorize('admin'));
+router.get('/', studentController.list);
+router.post('/', studentController.create);
+router.put('/:id', studentController.update);
+router.delete('/:id', studentController.deactivate);
 
-router.get('/', listStudents);
-router.post('/', createStudent);
-router.put('/:id', updateStudent);
-router.delete('/:id', desactivateStudent); 
 export default router;
