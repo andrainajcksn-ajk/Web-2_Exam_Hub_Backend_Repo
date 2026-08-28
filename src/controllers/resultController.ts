@@ -5,6 +5,6 @@ export async function myResults(req: Request, res: Response) {
   try {
     res.json(await resultService.studentResults((req as any).user.userId));
   } catch (err: any) {
-    res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
   }
 }
