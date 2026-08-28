@@ -13,3 +13,7 @@ export function errorHandler(
   console.error(err);
   res.status(500).json({ message: 'Internal server error' });
 }
+
+export const notFoundHandler = (req: Request, res: Response, next: NextFunction): void => {
+  res.status(404).json({ message: 'Ressource introuvable' });
+};
