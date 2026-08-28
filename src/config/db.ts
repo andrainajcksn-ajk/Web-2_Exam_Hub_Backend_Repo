@@ -9,6 +9,7 @@ export const pool = new Pool({
   database: env.dbName,
 });
 
+// Helper simple pour exécuter une requête paramétrée
 export async function query(text: string, params: unknown[] = []) {
   return pool.query(text, params);
 }
