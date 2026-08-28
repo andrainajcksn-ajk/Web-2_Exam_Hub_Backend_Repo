@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as attemptService from '../services/attemptService';
+import * as attemptService from '../Service/attemptService';
 
 export async function myExams(req: Request, res: Response) {
   try {
