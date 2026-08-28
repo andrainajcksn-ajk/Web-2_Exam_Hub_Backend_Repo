@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import * as examService from '../Service/examService';
-import * as questionService from '../Service/questionService';
-import * as resultService from '../Service/resultService';
+import * as examService from '../services/examService';
+import * as questionService from '../services/questionService';
+import * as resultService from '../services/resultService';
 
 export async function list(req: Request, res: Response) {
   try {
