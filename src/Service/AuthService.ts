@@ -1,34 +1,30 @@
-import { UserRepositorie } from '../repositories/userRepositorie';
-import { comparePassword } from '../security/password';
-import { signToken } from '../security/jwt';
-import { BadRequestError, UnauthorizedError, ForbiddenError } from '../errors/appError';
+import { AppError } from '../appError';
+import * as userRepo from '../repositories/userRepository.js';
+import { verifyPassword } from '../Security/password';
+import { signToken } from '../Security/jwt';
 
-interface LoginResult {
-  token: string;
-  user: { id: number; name: string; email: string; role: string };
+export async function login(email: string, password: string) {
+  if (!email || !password) {
+    throw new AppError(400, 'Email and password are required');
+  }
+
+  const user = await userRepo.findByEmail(email);
+  if (!user) {
+    throw new AppError(401, 'Invalid email or password');
+  }
+
+  if (!user.is_active) {
+    throw new AppError(401, 'Account disabled');
+  }
+
+  const valid = verifyPassword(password, user.password_hash!);
+  if (!valid) {
+    throw new AppError(401, 'Invalid email or password');
+  }
+
+  const token = signToken({ userId: user.id, role: user.role });
+  return {
+    token,
+    user: { id: user.id, name: user.name, role: user.role },
+  };
 }
-
-export const AuthService = {
-  async login(email: string, password: string): Promise<LoginResult> {
-    if (!email || !password) {
-      throw new BadRequestError('Email et mot de passe requis');
-    }
-
-    const user = await UserRepositorie.findByEmail(email);
-
-    if (!user || !(await comparePassword(password, user.password_hash))) {
-      throw new UnauthorizedError('Email ou mot de passe incorrect');
-    }
-
-    if (!user.is_active) {
-      throw new ForbiddenError('Ce compte a été désactivé');
-    }
-
-    const token = signToken({ userId: user.id, role: user.role });
-
-    return {
-      token,
-      user: { id: user.id, name: user.name, email: user.email, role: user.role },
-    };
-  },
-};

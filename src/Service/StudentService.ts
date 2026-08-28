@@ -1,105 +1,58 @@
-import { UserRepositorie } from '../repositories/userRepositorie';
-import { hashPassword } from '../security/password';
-import { BadRequestError, NotFoundError, ConflictError } from '../errors/appError';
+import { AppError } from '../appError';
+import * as userRepo from '../repositories/userRepository';
+import { hashPassword } from '../Security/password';
 
-interface StudentOutput {
-  id: number;
-  name: string;
-  email: string;
-  is_active: boolean;
-  created_at: Date;
+export async function listStudents() {
+  return userRepo.allStudents();
 }
 
-interface StudentInput {
-  name: string;
-  email: string;
-  password?: string;
+export async function createStudent(name: string, email: string, password: string) {
+  if (!name || !email || !password) {
+    throw new AppError(400, 'name, email and password are required');
+  }
+
+  const existing = await userRepo.findByEmail(email);
+  if (existing) {
+    throw new AppError(409, 'Email already in use');
+  }
+
+  return userRepo.createStudent(name, email, hashPassword(password));
 }
 
-const toOutput = (user: {
-  id: number;
-  name: string;
-  email: string;
-  is_active: boolean;
-  created_at: Date;
-}): StudentOutput => ({
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  is_active: user.is_active,
-  created_at: user.created_at,
-});
-
-const validateStudentInput = (data: StudentInput, requirePassword: boolean): void => {
-  if (!data.name || !data.name.trim()) {
-    throw new BadRequestError('Le nom est requis');
+export async function updateStudent(
+  id: number,
+  name: string,
+  email: string,
+  isActive: boolean,
+  password?: string
+) {
+  if (!name || !email) {
+    throw new AppError(400, 'name and email are required');
   }
-  if (!data.email || !data.email.trim()) {
-    throw new BadRequestError("L'email est requis");
+
+  const student = await userRepo.findById(id);
+  if (!student || student.role !== 'student') {
+    throw new AppError(404, 'Student not found');
   }
-  if (requirePassword && (!data.password || data.password.length < 8)) {
-    throw new BadRequestError('Le mot de passe doit contenir au moins 8 caractères');
-  }
-};
 
-export const StudentService = {
-  listStudents: async (): Promise<StudentOutput[]> => {
-    return UserRepositorie.findAllStudents();
-  },
-
-  createStudent: async (data: StudentInput): Promise<StudentOutput> => {
-    validateStudentInput(data, true);
-
-    const existing = await UserRepositorie.findByEmail(data.email.trim());
+  if (email !== student.email) {
+    const existing = await userRepo.findByEmail(email);
     if (existing) {
-      throw new ConflictError('Cet email est déjà utilisé');
+      throw new AppError(409, 'Email already in use');
     }
+  }
 
-    const password_hash = await hashPassword(data.password!);
+  const hash = password ? hashPassword(password) : undefined;
+  return userRepo.updateStudent(id, name, email, isActive, hash);
+}
 
-    const student = await UserRepositorie.create({
-      name: data.name.trim(),
-      email: data.email.trim(),
-      password_hash,
-    });
-
-    return toOutput(student);
-  },
-
-  updateStudent: async (id: number, data: StudentInput): Promise<StudentOutput> => {
-    validateStudentInput(data, false);
-
-    // Réinitialisation de mot de passe : optionnelle, via le même PUT
-    // (le sujet n'impose pas de route dédiée). Si absent, on ne touche à rien.
-    if (data.password !== undefined && data.password.length < 8) {
-      throw new BadRequestError('Le mot de passe doit contenir au moins 8 caractères');
-    }
-
-    const existing = await UserRepositorie.findByEmail(data.email.trim());
-    if (existing && existing.id !== id) {
-      throw new ConflictError('Cet email est déjà utilisé');
-    }
-
-    const password_hash = data.password ? await hashPassword(data.password) : null;
-
-    const updated = await UserRepositorie.update(id, {
-      name: data.name.trim(),
-      email: data.email.trim(),
-      password_hash,
-    });
-
-    if (!updated) {
-      throw new NotFoundError('Étudiant introuvable');
-    }
-
-    return toOutput(updated);
-  },
-
-  desactivateStudent: async (id: number): Promise<StudentOutput> => {
-    const student = await UserRepositorie.desactivate(id);
-    if (!student) {
-      throw new NotFoundError('Student not found');
-    }
-    return toOutput(student)
-  },
-};
+export async function deactivateStudent(id: number) {
+  const student = await userRepo.findById(id);
+  if (!student || student.role !== 'student') {
+    throw new AppError(404, 'Student not found');
+  }
+  if (!student.is_active) {
+    throw new AppError(400, 'Student is already disabled');
+  }
+  return userRepo.deactivate(id);
+}
