@@ -1,6 +1,6 @@
 import { AppError } from '../appError';
 import * as userRepo from '../repositories/userRepository';
-import { comparePassword } from '../security/password';
+import { verifyPassword } from '../security/password';
 import { signToken } from '../security/jwt';
 
 export async function login(email: string, password: string) {
@@ -17,7 +17,7 @@ export async function login(email: string, password: string) {
     throw new AppError(401, 'Account disabled');
   }
 
-  const valid = await comparePassword(password, user.password_hash!);
+  const valid = verifyPassword(password, user.password_hash!);
   if (!valid) {
     throw new AppError(401, 'Invalid email or password');
   }

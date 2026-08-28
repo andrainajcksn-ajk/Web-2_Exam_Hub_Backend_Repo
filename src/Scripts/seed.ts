@@ -1,7 +1,6 @@
 import { query } from '../config/db';
-import { hashPassword } from '../Security/password';
+import { hashPassword } from '../security/password';
 
-// RG-01 : premier compte administrateur via ce script
 async function seed() {
   const email = process.env.ADMIN_EMAIL || 'admin@examhub.local';
   const password = process.env.ADMIN_PASSWORD || 'admin123';

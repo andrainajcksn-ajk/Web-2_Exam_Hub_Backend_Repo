@@ -1,18 +1,13 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
-import { AuthenticatedUser } from '../models/user';
+import jwt from 'jsonwebtoken';
+import { env } from '../config/env';
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
-const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || '8h') as NonNullable<SignOptions['expiresIn']>;
-
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET manquant dans le fichier .env');
+export function signToken(payload: { userId: number; role: string }) {
+  return jwt.sign(payload, env.jwtSecret, { expiresIn: env.jwtExpiresIn } as any);
 }
 
-export const signToken = (payload: AuthenticatedUser): string => {
-  const options: SignOptions = { expiresIn: JWT_EXPIRES_IN };
-  return jwt.sign(payload, JWT_SECRET, options);
-}
-
-export const verifyToken = (token: string): AuthenticatedUser => {
-  return jwt.verify(token, JWT_SECRET) as AuthenticatedUser;
+export function verifyToken(token: string) {
+  return jwt.verify(token, env.jwtSecret) as {
+    userId: number;
+    role: string;
+  };
 }

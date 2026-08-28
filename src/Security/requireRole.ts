@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { query } from '../config/db';
 
-// Vérifie le rôle et que le compte est actif
 export function requireRole(role: string) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const user = (req as any).user;
