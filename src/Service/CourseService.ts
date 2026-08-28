@@ -1,5 +1,5 @@
-import { CourseRepositorie } from '../Repositorie/CourseRepositorie';
-import { Course } from '../Model/Course';
+import { CourseRepositorie } from '../repositories/CourseRepositorie';
+import { Course } from '../models/Course';
 import { BadRequestError, NotFoundError, ConflictError } from '../errors/AppError';
 
 interface CourseInput {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CourseService } from '../Service/CourseService';
+import { CourseService } from '../service/CourseService';
 import { asyncHandler } from '../middlewares/errorHandler';
 
 export const listCourses = asyncHandler(async (req: Request, res: Response) => {
