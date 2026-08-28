@@ -1,5 +1,5 @@
 import { pool } from '../config/db';
-import { User } from '../models/User';
+import { User } from '../models/user';
 
 export const UserRepositorie = {
   async findByEmail(email: string): Promise<User | null> {

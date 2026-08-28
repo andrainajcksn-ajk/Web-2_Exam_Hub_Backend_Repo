@@ -1,6 +1,6 @@
-import { UserRepositorie } from '../repositories/UserRepositorie';
+import { UserRepositorie } from '../repositories/userRepositorie';
 import { hashPassword } from '../security/password';
-import { BadRequestError, NotFoundError, ConflictError } from '../errors/AppError';
+import { BadRequestError, NotFoundError, ConflictError } from '../errors/appError';
 
 interface StudentOutput {
   id: number;
