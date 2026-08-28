@@ -1,9 +1,15 @@
 import { Pool } from 'pg';
+import { env } from './env';
 
 export const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host: env.dbHost,
+  port: env.dbPort,
+  user: env.dbUser,
+  password: env.dbPassword,
+  database: env.dbName,
 });
+
+// Helper simple pour exécuter une requête paramétrée
+export async function query(text: string, params: unknown[] = []) {
+  return pool.query(text, params);
+}
