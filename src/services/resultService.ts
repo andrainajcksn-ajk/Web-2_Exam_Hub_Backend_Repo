@@ -3,7 +3,7 @@ import * as examRepo from '../repositories/examRepository';
 import * as attemptRepo from '../repositories/attemptRepository';
 import { query } from '../config/db';
 
-export async function examResults(examId: number) {
+export const examResults = async (examId: number) => {
   const exam = await examRepo.findById(examId);
   if (!exam) throw new AppError(404, 'Exam not found');
 
@@ -35,9 +35,9 @@ export async function examResults(examId: number) {
     attempt_count: attemptCount,
     results: rows,
   };
-}
+};
 
-export async function studentResults(studentId: number) {
+export const studentResults = async (studentId: number) => {
   const { rows } = await query(
     `SELECT e.id AS exam_id, e.title, c.code AS course_code,
             a.score, a.submitted_at,
@@ -50,4 +50,4 @@ export async function studentResults(studentId: number) {
     [studentId]
   );
   return rows;
-}
+};

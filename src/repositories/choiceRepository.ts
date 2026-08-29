@@ -1,7 +1,6 @@
 import { query } from '../config/db';
 
-
-export async function choicesByQuestionIds(questionIds: number[]) {
+export const choicesByQuestionIds = async (questionIds: number[]) => {
   if (questionIds.length === 0) return {};
   const { rows } = await query(
     `SELECT * FROM choices WHERE question_id = ANY($1::int[]) ORDER BY id`,
@@ -13,4 +12,4 @@ export async function choicesByQuestionIds(questionIds: number[]) {
     grouped[c.question_id].push(c);
   }
   return grouped;
-}
+};

@@ -2,11 +2,12 @@
   "name": "web-2_exam_hub_backend_repo",
   "version": "1.0.0",
   "description": "Dépôt de code pour l'examen de WEB2 Exam Hub-Backend",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "seed": "tsx src/scripts/seed.ts",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "seed": "tsx src/scripts/seed.ts"
   },
   "repository": {
     "type": "git",

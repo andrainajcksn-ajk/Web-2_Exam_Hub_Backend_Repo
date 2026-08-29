@@ -2,23 +2,23 @@ import { AppError } from '../errors/appError';
 import * as examRepo from '../repositories/examRepository';
 import * as courseRepo from '../repositories/courseRepository';
 
-export async function listExams() {
+export const listExams = async () => {
   return examRepo.allExams();
-}
+};
 
-export async function getExam(id: number) {
+export const getExam = async (id: number) => {
   const exam = await examRepo.findById(id);
   if (!exam) throw new AppError(404, 'Exam not found');
   return exam;
-}
+};
 
-export async function createExam(input: {
+export const createExam = async (input: {
   course_id: number;
   title: string;
   description?: string;
   starts_at: string;
   ends_at: string;
-}) {
+}) => {
   if (!input.course_id || !input.title || !input.starts_at || !input.ends_at) {
     throw new AppError(400, 'course_id, title, starts_at and ends_at are required');
   }
@@ -41,15 +41,15 @@ export async function createExam(input: {
     starts_at: input.starts_at,
     ends_at: input.ends_at,
   });
-}
+};
 
-export async function updateExam(id: number, input: {
+export const updateExam = async (id: number, input: {
   course_id: number;
   title: string;
   description?: string;
   starts_at: string;
   ends_at: string;
-}) {
+}) => {
   const exam = await examRepo.findById(id);
   if (!exam) throw new AppError(404, 'Exam not found');
 
@@ -75,9 +75,9 @@ export async function updateExam(id: number, input: {
     starts_at: input.starts_at,
     ends_at: input.ends_at,
   });
-}
+};
 
-export async function deleteExam(id: number) {
+export const deleteExam = async (id: number) => {
   const exam = await examRepo.findById(id);
   if (!exam) throw new AppError(404, 'Exam not found');
 
@@ -87,4 +87,4 @@ export async function deleteExam(id: number) {
   }
   await examRepo.deleteExam(id);
   return true;
-}
+};

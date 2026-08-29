@@ -4,7 +4,7 @@ import * as questionRepo from '../repositories/questionRepository';
 import * as choiceRepo from '../repositories/choiceRepository';
 import { QuestionInput } from '../models/questionModel';
 
-function validateQuestion(input: QuestionInput) {
+const validateQuestion = (input: QuestionInput) => {
   if (!input.statement || !Array.isArray(input.choices)) {
     throw new AppError(400, 'statement and choices are required');
   }
@@ -15,9 +15,9 @@ function validateQuestion(input: QuestionInput) {
   if (correct !== 1) {
     throw new AppError(400, 'A question must have exactly one correct choice');
   }
-}
+};
 
-async function ensureNotLocked(examId: number) {
+const ensureNotLocked = async (examId: number) => {
   const attempts = await examRepo.countAttempts(examId);
   if (attempts > 0) {
     throw new AppError(
@@ -25,9 +25,9 @@ async function ensureNotLocked(examId: number) {
       'Cannot modify questions of an exam that has attempts'
     );
   }
-}
+};
 
-export async function questionsForExam(examId: number) {
+export const questionsForExam = async (examId: number) => {
   const exam = await examRepo.findById(examId);
   if (!exam) throw new AppError(404, 'Exam not found');
 
@@ -35,9 +35,9 @@ export async function questionsForExam(examId: number) {
   const ids = questions.map((q) => q.id);
   const choices = await choiceRepo.choicesByQuestionIds(ids);
   return questions.map((q) => ({ ...q, choices: choices[q.id] || [] }));
-}
+};
 
-export async function addQuestion(examId: number, input: QuestionInput) {
+export const addQuestion = async (examId: number, input: QuestionInput) => {
   const exam = await examRepo.findById(examId);
   if (!exam) throw new AppError(404, 'Exam not found');
 
@@ -50,9 +50,9 @@ export async function addQuestion(examId: number, input: QuestionInput) {
   }
   const choices = await questionRepo.choicesForQuestion(question.id);
   return { ...question, choices };
-}
+};
 
-export async function updateQuestion(id: number, input: QuestionInput) {
+export const updateQuestion = async (id: number, input: QuestionInput) => {
   const question = await questionRepo.findById(id);
   if (!question) throw new AppError(404, 'Question not found');
 
@@ -66,13 +66,13 @@ export async function updateQuestion(id: number, input: QuestionInput) {
   }
   const choices = await questionRepo.choicesForQuestion(id);
   return { ...(await questionRepo.findById(id)), choices };
-}
+};
 
-export async function deleteQuestion(id: number) {
+export const deleteQuestion = async (id: number) => {
   const question = await questionRepo.findById(id);
   if (!question) throw new AppError(404, 'Question not found');
 
   await ensureNotLocked(question.exam_id);
   await questionRepo.deleteQuestion(id);
   return true;
-}
+};

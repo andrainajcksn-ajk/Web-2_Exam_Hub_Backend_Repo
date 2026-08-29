@@ -1,11 +1,11 @@
 import { AppError } from '../errors/appError';
 import * as courseRepo from '../repositories/courseRepository';
 
-export async function listCourses() {
+export const listCourses = async () => {
   return courseRepo.allCourses();
-}
+};
 
-export async function createCourse(code: string, name: string, description?: string) {
+export const createCourse = async (code: string, name: string, description?: string) => {
   if (!code || !name) {
     throw new AppError(400, 'code and name are required');
   }
@@ -14,9 +14,9 @@ export async function createCourse(code: string, name: string, description?: str
     throw new AppError(409, 'Course code already in use');
   }
   return courseRepo.createCourse(code, name, description || null);
-}
+};
 
-export async function updateCourse(id: number, code: string, name: string, description?: string) {
+export const updateCourse = async (id: number, code: string, name: string, description?: string) => {
   if (!code || !name) {
     throw new AppError(400, 'code and name are required');
   }
@@ -31,9 +31,9 @@ export async function updateCourse(id: number, code: string, name: string, descr
     }
   }
   return courseRepo.updateCourse(id, code, name, description || null);
-}
+};
 
-export async function deleteCourse(id: number) {
+export const deleteCourse = async (id: number) => {
   const course = await courseRepo.findById(id);
   if (!course) {
     throw new AppError(404, 'Course not found');
@@ -43,4 +43,4 @@ export async function deleteCourse(id: number) {
     throw new AppError(409, 'Cannot delete a course that has exams');
   }
   return courseRepo.deleteCourse(id);
-}
+};
