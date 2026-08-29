@@ -7,11 +7,9 @@ import * as attemptRepo from '../repositories/attemptRepository';
 import * as answerRepo from '../repositories/answerRepository';
 import { AnswerInput } from '../models/attemptModel';
 
-function now() {
-  return new Date();
-}
+const now = () => new Date();
 
-export async function availableExams(studentId: number) {
+export const availableExams = async (studentId: number) => {
   const { rows } = await query(
     `SELECT e.id, e.title, e.description, e.ends_at,
             json_build_object('code', c.code, 'name', c.name) AS course,
@@ -25,9 +23,9 @@ export async function availableExams(studentId: number) {
     [studentId]
   );
   return rows;
-}
+};
 
-export async function getExamDetail(studentId: number, examId: number) {
+export const getExamDetail = async (studentId: number, examId: number) => {
   const { rows } = await query(
     `SELECT e.id, e.title, e.description, e.starts_at, e.ends_at,
             json_build_object('code', c.code, 'name', c.name) AS course,
@@ -62,9 +60,9 @@ export async function getExamDetail(studentId: number, examId: number) {
   }));
 
   return exam;
-}
+};
 
-export async function submitExam(studentId: number, examId: number, answers: AnswerInput[]) {
+export const submitExam = async (studentId: number, examId: number, answers: AnswerInput[]) => {
   const exam = await examRepo.findById(examId);
   if (!exam) throw new AppError(404, 'Exam not found');
 
@@ -138,4 +136,4 @@ export async function submitExam(studentId: number, examId: number, answers: Ans
 
   const total = questions.reduce((s, q) => s + q.points, 0);
   return { score, total_points: total, correction };
-}
+};

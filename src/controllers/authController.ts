@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
+import { asyncHandler } from '../middlewares/asyncHandler';
 import * as authService from '../services/authService';
 
-export async function login(req: Request, res: Response) {
-  try {
-    const { email, password } = req.body;
-    const data = await authService.login(email, password);
-    res.json(data);
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const login = asyncHandler(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  const data = await authService.login(email, password);
+  res.json(data);
+});

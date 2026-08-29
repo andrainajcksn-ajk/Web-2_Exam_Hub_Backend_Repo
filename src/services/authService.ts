@@ -3,7 +3,7 @@ import * as userRepo from '../repositories/userRepository';
 import { comparePassword } from '../security/password';
 import { signToken } from '../security/jwt';
 
-export async function login(email: string, password: string) {
+export const login = async (email: string, password: string) => {
   if (!email || !password) {
     throw new AppError(400, 'Email and password are required');
   }
@@ -27,4 +27,4 @@ export async function login(email: string, password: string) {
     token,
     user: { id: user.id, name: user.name, role: user.role },
   };
-}
+};

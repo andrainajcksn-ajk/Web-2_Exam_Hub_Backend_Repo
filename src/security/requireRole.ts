@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { query } from '../config/db';
 
-export function requireRole(role: string) {
+export const requireRole = (role: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const user = (req as any).user;
     if (!user) {
@@ -30,4 +30,4 @@ export function requireRole(role: string) {
     (req as any).user.role = dbUser.role;
     next();
   };
-}
+};

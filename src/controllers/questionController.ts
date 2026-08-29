@@ -1,20 +1,13 @@
 import { Request, Response } from 'express';
+import { asyncHandler } from '../middlewares/asyncHandler';
 import * as questionService from '../services/questionService';
 
-export async function update(req: Request, res: Response) {
-  try {
-    const q = await questionService.updateQuestion(Number(req.params.id), req.body);
-    res.json(q);
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const update = asyncHandler(async (req: Request, res: Response) => {
+  const q = await questionService.updateQuestion(Number(req.params.id), req.body);
+  res.json(q);
+});
 
-export async function remove(req: Request, res: Response) {
-  try {
-    await questionService.deleteQuestion(Number(req.params.id));
-    res.json({ message: 'Question deleted' });
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const remove = asyncHandler(async (req: Request, res: Response) => {
+  await questionService.deleteQuestion(Number(req.params.id));
+  res.json({ message: 'Question deleted' });
+});

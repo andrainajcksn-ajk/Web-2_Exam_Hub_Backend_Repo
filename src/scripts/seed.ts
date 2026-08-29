@@ -1,7 +1,7 @@
 import { query } from '../config/db';
 import { hashPassword } from '../security/password';
 
-async function seed() {
+const seed = async () => {
   const email = process.env.ADMIN_EMAIL || 'admin@examhub.local';
   const password = process.env.ADMIN_PASSWORD || 'admin123';
   const name = process.env.ADMIN_NAME || 'Administrateur';
@@ -34,7 +34,7 @@ async function seed() {
     }
   }
   process.exit(0);
-}
+};
 
 seed().catch((err) => {
   console.error(err);

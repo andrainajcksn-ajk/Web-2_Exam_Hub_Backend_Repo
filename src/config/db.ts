@@ -9,6 +9,6 @@ export const pool = new Pool({
   database: env.dbName,
 });
 
-export async function query(text: string, params: unknown[] = []) {
+export const query = (text: string, params: unknown[] = []) => {
   return pool.query(text, params);
-}
+};

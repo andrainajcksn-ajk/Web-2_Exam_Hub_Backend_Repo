@@ -2,11 +2,11 @@ import { AppError } from '../errors/appError';
 import * as userRepo from '../repositories/userRepository';
 import { hashPassword } from '../security/password';
 
-export async function listStudents() {
+export const listStudents = async () => {
   return userRepo.allStudents();
-}
+};
 
-export async function createStudent(name: string, email: string, password: string) {
+export const createStudent = async (name: string, email: string, password: string) => {
   if (!name || !email || !password) {
     throw new AppError(400, 'name, email and password are required');
   }
@@ -17,15 +17,15 @@ export async function createStudent(name: string, email: string, password: strin
   }
 
   return userRepo.createStudent(name, email, await hashPassword(password));
-}
+};
 
-export async function updateStudent(
+export const updateStudent = async (
   id: number,
   name: string,
   email: string,
   isActive: boolean,
   password?: string
-) {
+) => {
   if (!name || !email) {
     throw new AppError(400, 'name and email are required');
   }
@@ -44,9 +44,9 @@ export async function updateStudent(
 
   const hash = password ? await hashPassword(password) : undefined;
   return userRepo.updateStudent(id, name, email, isActive, hash);
-}
+};
 
-export async function deactivateStudent(id: number) {
+export const deactivateStudent = async (id: number) => {
   const student = await userRepo.findById(id);
   if (!student || student.role !== 'student') {
     throw new AppError(404, 'Student not found');
@@ -55,4 +55,4 @@ export async function deactivateStudent(id: number) {
     throw new AppError(400, 'Student is already disabled');
   }
   return userRepo.deactivate(id);
-}
+};

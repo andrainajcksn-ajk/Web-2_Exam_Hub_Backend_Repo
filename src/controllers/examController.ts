@@ -1,72 +1,41 @@
 import { Request, Response } from 'express';
+import { asyncHandler } from '../middlewares/asyncHandler';
 import * as examService from '../services/examService';
 import * as questionService from '../services/questionService';
 import * as resultService from '../services/resultService';
 
-export async function list(req: Request, res: Response) {
-  try {
-    res.json(await examService.listExams());
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const list = asyncHandler(async (_req: Request, res: Response) => {
+  res.json(await examService.listExams());
+});
 
-export async function get(req: Request, res: Response) {
-  try {
-    res.json(await examService.getExam(Number(req.params.id)));
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const get = asyncHandler(async (req: Request, res: Response) => {
+  res.json(await examService.getExam(Number(req.params.id)));
+});
 
-export async function create(req: Request, res: Response) {
-  try {
-    const exam = await examService.createExam(req.body);
-    res.status(201).json(exam);
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const create = asyncHandler(async (req: Request, res: Response) => {
+  const exam = await examService.createExam(req.body);
+  res.status(201).json(exam);
+});
 
-export async function update(req: Request, res: Response) {
-  try {
-    const exam = await examService.updateExam(Number(req.params.id), req.body);
-    res.json(exam);
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const update = asyncHandler(async (req: Request, res: Response) => {
+  const exam = await examService.updateExam(Number(req.params.id), req.body);
+  res.json(exam);
+});
 
-export async function remove(req: Request, res: Response) {
-  try {
-    await examService.deleteExam(Number(req.params.id));
-    res.json({ message: 'Exam deleted' });
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const remove = asyncHandler(async (req: Request, res: Response) => {
+  await examService.deleteExam(Number(req.params.id));
+  res.json({ message: 'Exam deleted' });
+});
 
-export async function questions(req: Request, res: Response) {
-  try {
-    res.json(await questionService.questionsForExam(Number(req.params.id)));
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const questions = asyncHandler(async (req: Request, res: Response) => {
+  res.json(await questionService.questionsForExam(Number(req.params.id)));
+});
 
-export async function addQuestion(req: Request, res: Response) {
-  try {
-    const q = await questionService.addQuestion(Number(req.params.id), req.body);
-    res.status(201).json(q);
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const addQuestion = asyncHandler(async (req: Request, res: Response) => {
+  const q = await questionService.addQuestion(Number(req.params.id), req.body);
+  res.status(201).json(q);
+});
 
-export async function results(req: Request, res: Response) {
-  try {
-    res.json(await resultService.examResults(Number(req.params.id)));
-  } catch (err: any) {
-    res.status(err.statusCode || 500).json({ message: err.message || 'Internal error' });
-  }
-}
+export const results = asyncHandler(async (req: Request, res: Response) => {
+  res.json(await resultService.examResults(Number(req.params.id)));
+});

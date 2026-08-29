@@ -1,7 +1,7 @@
 import { query } from '../config/db';
 import { Exam } from '../models/examModel';
 
-export async function allExams(): Promise<Exam[]> {
+export const allExams = async (): Promise<Exam[]> => {
   const { rows } = await query(
     `SELECT e.id, e.title, e.description, e.starts_at, e.ends_at,
             json_build_object('id', c.id, 'code', c.code, 'name', c.name) AS course,
@@ -12,9 +12,9 @@ export async function allExams(): Promise<Exam[]> {
      ORDER BY e.id`
   );
   return rows;
-}
+};
 
-export async function findById(id: number): Promise<Exam | undefined> {
+export const findById = async (id: number): Promise<Exam | undefined> => {
   const { rows } = await query(
     `SELECT e.id, e.title, e.description, e.starts_at, e.ends_at,
             json_build_object('id', c.id, 'code', c.code, 'name', c.name) AS course,
@@ -26,15 +26,15 @@ export async function findById(id: number): Promise<Exam | undefined> {
     [id]
   );
   return rows[0];
-}
+};
 
-export async function createExam(input: {
+export const createExam = async (input: {
   course_id: number;
   title: string;
   description: string | null;
   starts_at: string;
   ends_at: string;
-}): Promise<Exam> {
+}): Promise<Exam> => {
   const { rows } = await query(
     `INSERT INTO exams (course_id, title, description, starts_at, ends_at)
      VALUES ($1, $2, $3, $4, $5)
@@ -43,9 +43,9 @@ export async function createExam(input: {
   );
   const full = await findById(rows[0].id);
   return full!;
-}
+};
 
-export async function updateExam(
+export const updateExam = async (
   id: number,
   input: {
     course_id: number;
@@ -54,7 +54,7 @@ export async function updateExam(
     starts_at: string;
     ends_at: string;
   }
-): Promise<Exam | undefined> {
+): Promise<Exam | undefined> => {
   const { rows } = await query(
     `UPDATE exams
      SET course_id = $1, title = $2, description = $3, starts_at = $4, ends_at = $5
@@ -64,16 +64,16 @@ export async function updateExam(
   );
   if (rows.length === 0) return undefined;
   return findById(id);
-}
+};
 
-export async function deleteExam(id: number): Promise<boolean> {
+export const deleteExam = async (id: number): Promise<boolean> => {
   const { rowCount } = await query('DELETE FROM exams WHERE id = $1', [id]);
   return (rowCount ?? 0) > 0;
-}
+};
 
-export async function countAttempts(examId: number): Promise<number> {
+export const countAttempts = async (examId: number): Promise<number> => {
   const { rows } = await query('SELECT COUNT(*)::int AS count FROM attempts WHERE exam_id = $1', [
     examId,
   ]);
   return rows[0].count;
-}
+};
